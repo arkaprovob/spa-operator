@@ -101,6 +101,9 @@ public class SsrResourceProvisioner {
         LOG.info("rolling is done");
     }
 
+    
+    
+    
     public boolean updateConfigMapOf(Tuple3<String, String, String> labelValues, Map<String, String> configValues,
             String nameSpace) {
 
@@ -110,7 +113,7 @@ public class SsrResourceProvisioner {
         var configMapResource = client.configMaps()
                 .inNamespace(nameSpace(nameSpace)).withName(resourceName);
         var configMap = configMapResource.get();
-
+        // TODO handle case when configmap does not exists and provisioning api creates the configmap for the first time.
         LOG.info("Found configMap with name  {}", configMap.getMetadata().getName());
 
         var configMapData = configMap.getData();
@@ -123,9 +126,12 @@ public class SsrResourceProvisioner {
         var outcome = configMapResource.patch(configMap);
 
         var delPodStatus = deletePod(labelValues, nameSpace);
-
-        return Objects.nonNull(outcome) && delPodStatus;
+        if(!delPodStatus)
+                LOG.warn("Unable to delete the pod, it probably did not exist");
+        return Objects.nonNull(outcome);
     }
+
+
 
     private boolean deletePod(Tuple3<String, String, String> labelValues, String nameSpace) {
         var labels = Map.of(

@@ -47,6 +47,9 @@ public record SsrResourceDetails(String nameSpace, String imageUrl, String app, 
         return routerDomainFromProperty;
     }
 
+    public boolean hasConfigMap(){
+        return !configMap.isEmpty();
+    }
 
 
 

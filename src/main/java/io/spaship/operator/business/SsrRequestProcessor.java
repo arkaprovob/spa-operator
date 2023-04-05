@@ -57,8 +57,17 @@ public class SsrRequestProcessor {
 
     private Optional<JsonObject> provision(SsrResourceDetails requestPayload) {
         var parameters = requestPayload.toTemplateParameterMap();
+
+        if (requestPayload.hasConfigMap()){ // TODO re-write this properly, it breaks the SRP
+            var response = updateConfigMap(requestPayload);
+            var toString =  response.orElse(new JsonObject().put(STATUS,"something went wrong while provisioning the config-map"));
+            LOG.info("configmap create or update status is as follows {}",toString);
+        }
+
         boolean  isProvisioned =  resourceProvisioner
             .createNewEnvironment(parameters,requestPayload.nameSpace());
+
+
         if(isProvisioned){
             var constructedUrl = constructAccessUrl(parameters);
             LOG.info("constructed access url is {}",constructedUrl);
