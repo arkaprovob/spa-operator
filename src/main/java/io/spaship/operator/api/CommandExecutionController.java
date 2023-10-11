@@ -25,7 +25,7 @@ public class CommandExecutionController {
     }
 
     @POST
-    @Path("/test-exception")
+    @Path("/symlink")
     @Produces("text/json")
     @Consumes(MediaType.APPLICATION_JSON)
     public  String createSymlink(CommandExecForm form) {

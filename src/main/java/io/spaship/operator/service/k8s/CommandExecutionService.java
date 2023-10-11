@@ -24,7 +24,7 @@ public class CommandExecutionService {
 
     // todo :scope of improvement: read these two vars from the config map
     private static final String CONTAINER_NAME = "httpd";
-    private static final String BASE_HTTP_DIR = "/var/www/http";
+    private static final String BASE_HTTP_DIR = "/var/www/html";
 
 
     private final OpenShiftClient ocClient;
